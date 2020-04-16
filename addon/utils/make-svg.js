@@ -23,12 +23,16 @@ export function inlineSvgFor(assetId, getInlineAsset, attrs = {}) {
   }
 
   let svgAttrs = asset.attrs ? assign({}, asset.attrs, attrs) : attrs;
-  let { size } = attrs;
+  let { size, trimmed } = attrs;
 
   if (size) {
     svgAttrs.width = parseFloat(svgAttrs.width) * size || svgAttrs.width;
     svgAttrs.height = parseFloat(svgAttrs.height) * size || svgAttrs.height;
     delete svgAttrs.size;
+  }
+
+  if (trimmed) {
+    svgAttrs.viewBox = [svgAttrs['data-x'], svgAttrs['data-y'], svgAttrs['data-width'], svgAttrs['data-height']].join('.');
   }
 
   return `<svg ${formatAttrs(svgAttrs)}>${asset.content}</svg>`;
